@@ -1,9 +1,9 @@
 <script>
   import { PLAYER, Locale, DISPATCH_MENU, DISPATCH_MUTED, DISPATCH_DISABLED, IS_RIGHT_MARGIN, processedDispatchMenu } from '@store/stores';
   import { fly, slide } from 'svelte/transition';
-	import { timeAgo } from '@utils/timeAgo'
-	import { SendNUI } from '@utils/SendNUI'
-	import { onDestroy, onMount } from 'svelte'
+	import { timeAgo } from '@utils/timeAgo';
+	import { SendNUI } from '@utils/SendNUI';
+	import { onDestroy, onMount } from 'svelte';
   
   let activeCallId = null;
   let additionalUnitsVisible = {};
@@ -14,12 +14,12 @@
   onMount(() => {
     unsubscribe = IS_RIGHT_MARGIN.subscribe((value) => {
       menuRight = value;
-    })
-  })
+    });
+  });
 
   onDestroy(() => {
     unsubscribe();
-  })
+  });
   
   function toggleDispatch(id) {
     if (activeCallId === id) {
@@ -50,7 +50,6 @@
 
   function toggleMargin() {
     menuRight = !menuRight;
-
     IS_RIGHT_MARGIN.set(menuRight);
   }
 
@@ -128,7 +127,7 @@
     </button>
   </div>
   <!-- MENU -->
-  <div class="w-[25%] h-[97%] overflow-auto pr-[0.5vh]" class:ml-[2vh]={!menuRight} class:mr-[2vh]={menuRight}>
+  <div class="w-[20%] h-auto max-h-[20vh] overflow-auto pr-[0.5vh]" class:ml-[2vh]={!menuRight} class:mr-[2vh]={menuRight}>
     {#if $DISPATCH_MENU}
     {#each $processedDispatchMenu as dispatch}
     <button class="w-full h-fit mb-[1vh] font-medium {dispatch.priority == 1 ? 'bg-priority_secondary' : 'bg-secondary'}" on:click={() => toggleDispatch(dispatch.id)}>

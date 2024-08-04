@@ -43,7 +43,7 @@
 
 <style>
   .notification {
-    background-color: #650000; /* Update to match the desired background color */
+    background-color: #192a4b; /* Update to match the desired background color */
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
@@ -63,7 +63,7 @@
     margin-right: 10px;
   }
   .notification-priority {
-    background-color: #7a0b0b; /* Update to match the priority color */
+    background-color: #964d4d; /* Update to match the priority color */
     border-radius: 5px;
     padding: 5px;
   }
