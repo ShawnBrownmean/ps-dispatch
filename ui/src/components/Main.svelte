@@ -33,41 +33,32 @@
   });
 
   function getDispatchData(dispatch) {
-    return [
-      { icon: 'fas fa-map-marker-alt', value: dispatch.data.street },
-      { icon: 'fas fa-clock', value: timeAgo(dispatch.data.time) },
-      { label: 'Priority', value: dispatch.data.priority }
-    ];
+    if ($shortCalls) {
+      return [
+        { label: 'Call', value: dispatch.data.message },
+        { icon: 'fas fa-comment', label: 'Information', value: dispatch.data.information },
+      ];
+    } else {
+      return [
+      { icon: 'fas fa-clock', label: 'Time', value: timeAgo(dispatch.data.time) },
+      { icon: 'fas fa-user', label: 'Name', value: dispatch.data.name },
+      { icon: 'fas fa-phone', label: 'Number', value: dispatch.data.number },
+      { icon: 'fas fa-comment', label: 'Information', value: dispatch.data.information },
+      { icon: 'fas fa-map-location-dot', label: 'Street', value: dispatch.data.street },
+      { icon: 'fas fa-user', label: 'Gender', value: dispatch.data.gender },
+      { icon: 'fas fa-gun', label: 'Automatic Gun Fire', value: dispatch.data.automaticGunFire },
+      { icon: 'fas fa-gun', label: 'Weapon', value: dispatch.data.weapon },
+      { icon: 'fas fa-car', label: 'Vehicle', value: dispatch.data.vehicle },
+      { icon: 'fas fa-rectangle-list', label: 'Plate', value: dispatch.data.plate },
+      { icon: 'fas fa-droplet', label: 'Color', value: dispatch.data.color },
+      { icon: 'fas fa-car', label: 'Class', value: dispatch.data.class },
+      { icon: 'fas fa-door-open', label: 'Doors', value: dispatch.data.doors },
+      { icon: 'fas fa-compass', label: 'Heading', value: dispatch.data.heading },
+      ];
+    }
   }
 </script>
 
-<style>
-  .notification {
-    background-color: #192a4b; /* Update to match the desired background color */
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 10px;
-    color: white; /* Text color */
-  }
-  .notification-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .notification-content {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .notification-icon {
-    margin-right: 10px;
-  }
-  .notification-priority {
-    background-color: #964d4d; /* Update to match the priority color */
-    border-radius: 5px;
-    padding: 5px;
-  }
-</style>
 
 <div class="w-screen h-screen flex justify-end { $IS_RIGHT_MARGIN ? 'flex-row' : 'flex-row-reverse' } items-end">
   <div class="w-[25%] h-[97%]"
@@ -75,26 +66,39 @@
        class:mr-[2vh]={$IS_RIGHT_MARGIN}
       >
     {#each notifications.slice().reverse() as dispatch, index (dispatch.data.id)}
-      <div class="notification" transition:fly="{{ x: $IS_RIGHT_MARGIN ? 400 : -400 }}">
-        <div class="notification-header">
-          <div class="flex items-center">
-            <i class="fas fa-bullhorn notification-icon"></i>
-            <p>{dispatch.data.message}</p>
-          </div>
-          <div class="flex items-center">
-            <p class="notification-priority">{dispatch.data.code}</p>
-            <p class="notification-priority">#{dispatch.data.id}</p>
-          </div>
+      <div class="w-full h-fit my-[0.5vh] font-medium {dispatch.data.priority == 1 ? " bg-priority_secondary" : " bg-secondary"}" transition:fly="{{ x: $IS_RIGHT_MARGIN ? 400 : -400 }}">
+        <div class="flex items-center gap-[1vh] p-[1vh] text-[1.5vh] {dispatch.data.priority == 1 ? " bg-priority_primary" : " bg-primary"}">
+          <p class="px-[2vh] py-[0.2vh] rounded-full bg-accent_green">
+            #{dispatch.data.id}
+          </p>
+          <p class="px-[2vh] py-[0.2vh] rounded-full {dispatch.data.priority == 1 ? " bg-accent_red" : "bg-accent_cyan"}">
+            {dispatch.data.code}
+          </p>
+          <p class="py-[0.2vh]">
+            {dispatch.data.message}
+          </p>
+          <i class="{dispatch.data.icon} py-[0.2vh] ml-auto mr-[0.5vh] {dispatch.data.priority == 1 ? " text-accent_red" : "text-accent_cyan"}"></i>
         </div>
-        <div class="notification-content">
-          {#each getDispatchData(dispatch) as field}
-            {#if field.value}
-              <p>
-                <i class={field.icon + ' notification-icon'}></i>
-                {field.label ? field.label + ': ' : ''}{field.value}
+        <div class="flex">
+          <div class="flex flex-col p-[1vh] gap-y-[0.4vh] text-[1.4vh] w-[70%]">
+              {#if dispatch.data}
+                {#each getDispatchData(dispatch) as field}
+                  {#if field.value}
+                    <p>
+                      <i class={field.icon + ' mr-[0.5vh]'}></i>
+                      {field.label}: {field.value}
+                    </p>
+                  {/if}
+                {/each}
+              {/if}
+          </div>
+          <div class="w-[30%] flex items-end justify-center mb-[1vh]">
+            {#if index === 0}
+              <p class="px-[1.5vh] py-[0.4vh] rounded-full text-[1.3vh] {dispatch.data.priority == 1 ? " bg-priority_primary" : " bg-primary"}">
+                [{$RESPOND_KEYBIND}] Respond
               </p>
             {/if}
-          {/each}
+          </div>
         </div>
       </div>
     {/each}
